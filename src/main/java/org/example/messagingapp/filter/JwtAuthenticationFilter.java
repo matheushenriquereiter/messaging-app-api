@@ -1,8 +1,7 @@
-package org.example.messagingapp.filters;
+package org.example.messagingapp.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.messagingapp.service.JwtService;
@@ -32,7 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             token = request.getHeader("Authorization").replace("Bearer ", "");
         }
 
-        if (jwtService.isTokenValid((token))) {
+        if (token != null && jwtService.isTokenValid((token))) {
             String username = jwtService.extractUsername(token);
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());

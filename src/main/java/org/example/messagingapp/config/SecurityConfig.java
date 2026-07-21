@@ -1,7 +1,7 @@
 package org.example.messagingapp.config;
 
 import jakarta.servlet.DispatcherType;
-import org.example.messagingapp.filters.JwtAuthenticationFilter;
+import org.example.messagingapp.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
-                        .requestMatchers("/token", "/auth/register", "/auth/login", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/auth/register", "/auth/login", "/css/**", "/js/**").permitAll()
                         .anyRequest().authenticated())
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
