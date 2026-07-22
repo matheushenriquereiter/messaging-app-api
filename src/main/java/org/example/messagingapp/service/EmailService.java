@@ -2,11 +2,11 @@ package org.example.messagingapp.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import org.example.messagingapp.exceptions.BusinessException;
 import org.example.messagingapp.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 @Service
+@RequiredArgsConstructor
 public class EmailService {
     private final JavaMailSender mailSender;
     private final JwtService jwtService;
@@ -22,18 +23,11 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String sender;
 
-    public EmailService(JavaMailSender mailSender, JwtService jwtService) {
-        this.mailSender = mailSender;
-        this.jwtService = jwtService;
-    }
-
     public void sendVerificationEmail(User user) {
         String token = jwtService.generateVerificationToken(String.valueOf(user.getId()));
-        String verifyUrl = "http://localhost:8080/auth/verify?jwtToken=" + URLEncoder.encode(token, StandardCharsets.UTF_8);
+        String verifyUrl = "http://localhost:8080/auth/verify-email?jwtToken=" + URLEncoder.encode(token, StandardCharsets.UTF_8);
 
         String bodyHtml = "Click to verify your email: <a href='%s'>Verify Email</a>".formatted(verifyUrl);
-
-        System.out.println(bodyHtml);
 
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();

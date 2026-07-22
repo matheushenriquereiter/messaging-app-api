@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
-                        .requestMatchers("/auth/register", "/auth/login", "/auth/verify", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/auth/register", "/auth/login", "/auth/verify-email", "/css/**", "/js/**").permitAll()
                         .anyRequest().authenticated())
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")

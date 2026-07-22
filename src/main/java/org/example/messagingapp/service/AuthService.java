@@ -1,6 +1,6 @@
 package org.example.messagingapp.service;
 
-import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.example.messagingapp.dto.JwtTokenDTO;
 import org.example.messagingapp.dto.UserLoginDTO;
 import org.example.messagingapp.dto.UserRegisterDTO;
@@ -14,18 +14,12 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final EmailService emailService;
-
-    public AuthService(PasswordEncoder passwordEncoder, UserRepository userRepository, JwtService jwtService, EmailService emailService) {
-        this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
-        this.jwtService = jwtService;
-        this.emailService = emailService;
-    }
 
     public void register(UserRegisterDTO userRegisterDTO) {
         Optional<User> user = userRepository.getUserByEmail(userRegisterDTO.email());
@@ -42,7 +36,7 @@ public class AuthService {
         emailService.sendVerificationEmail(userToRegister);
     }
 
-    public void verify(String jwtToken) {
+    public void verifyEmail(String jwtToken) {
         if (!jwtService.isTokenValid(jwtToken)) {
             throw new BusinessException(HttpStatus.BAD_REQUEST, "Invalid or expired token");
         }
