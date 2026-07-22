@@ -22,13 +22,20 @@ public class AuthController {
     public ResponseEntity<Void> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
         authService.register(userRegisterDTO);
 
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<Void> verify(@RequestParam("jwtToken") String jwtToken) {
+        authService.verify(jwtToken);
+
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<JwtTokenDTO> register(@Valid @RequestBody UserLoginDTO userLoginDTO) {
         JwtTokenDTO jwtTokenDTO = authService.login(userLoginDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(jwtTokenDTO);
+        return ResponseEntity.ok(jwtTokenDTO);
     }
 }

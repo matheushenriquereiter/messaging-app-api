@@ -2,6 +2,7 @@ package org.example.messagingapp.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,21 +18,25 @@ public class User {
     @SequenceGenerator(name = "user_seq_gen", sequenceName = "user_seq", allocationSize = 1)
     private Long id;
 
-    @NotBlank(message = "Username cannot be null or empty")
+    @NotBlank(message = "User username cannot be null or empty")
     @Column(nullable = false)
     private String username;
 
-    @NotBlank(message = "Email cannot be null or empty")
+    @NotBlank(message = "User email cannot be null or empty")
     @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank(message = "Password cannot be null or empty")
+    @NotBlank(message = "User password cannot be null or empty")
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private boolean isVerified;
 
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.isVerified = false;
     }
 }
