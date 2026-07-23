@@ -20,9 +20,10 @@ public class JwtService {
     @Value("${spring.secret_key}")
     private String secretKey;
 
-    public String generateToken(String username) {
+    public String generateAccessToken(String username) {
         return Jwts.builder()
                 .subject(username)
+                .claim("purpose", "access_token")
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSignInKey())
@@ -34,16 +35,15 @@ public class JwtService {
 
         return Jwts.builder()
                 .subject(userId)
+                .claim("purpose", "verification_token")
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plus(Duration.ofMinutes(15))))
                 .signWith(getSignInKey())
                 .compact();
     }
 
-    public String extractSubject(String token) {
-        Claims payload = Jwts.parser().verifyWith(getSignInKey()).build().parseSignedClaims(token).getPayload();
-
-        return payload.getSubject();
+    public Claims extractAllClaims(String token) {
+        return Jwts.parser().verifyWith(getSignInKey()).build().parseSignedClaims(token).getPayload();
     }
 
     public boolean isTokenValid(String token) {

@@ -1,5 +1,6 @@
 package org.example.messagingapp.service;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.example.messagingapp.dto.JwtTokenDTO;
 import org.example.messagingapp.dto.UserLoginDTO;
@@ -41,7 +42,8 @@ public class AuthService {
             throw new BusinessException(HttpStatus.BAD_REQUEST, "Invalid or expired token");
         }
 
-        String userId = jwtService.extractSubject(jwtToken);
+        Claims claims = jwtService.extractAllClaims(jwtToken);
+        String userId = claims.getSubject();
         User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "User not found"));
 
         if (user.isVerified()) {
@@ -63,6 +65,6 @@ public class AuthService {
             throw new BusinessException(HttpStatus.UNAUTHORIZED, "User not verified");
         }
 
-        return new JwtTokenDTO(jwtService.generateToken(user.getEmail()));
+        return new JwtTokenDTO(jwtService.generateAccessToken(user.getEmail()));
     }
 }
