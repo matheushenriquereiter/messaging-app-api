@@ -25,7 +25,7 @@ public class EmailService {
 
     public void sendVerificationEmail(User user) {
         String token = jwtService.generateVerificationToken(String.valueOf(user.getId()));
-        String verifyUrl = "http://localhost:8080/auth/verify-email?jwtToken=" + URLEncoder.encode(token, StandardCharsets.UTF_8);
+        String verifyUrl = "http://localhost:5173/auth/verify-email?jwtToken=" + URLEncoder.encode(token, StandardCharsets.UTF_8);
 
         String bodyHtml = "Click to verify your email: <a href='%s'>Verify Email</a>".formatted(verifyUrl);
 

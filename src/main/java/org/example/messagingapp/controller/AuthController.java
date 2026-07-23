@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@CrossOrigin
 public class AuthController {
     private final AuthService authService;
 
@@ -23,9 +24,9 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PatchMapping("/verify-email")
-    public ResponseEntity<Void> verifyEmail(@RequestParam("jwtToken") String jwtToken) {
-        authService.verifyEmail(jwtToken);
+    @PostMapping("/validate-email")
+    public ResponseEntity<Void> validateEmail(@Valid @RequestBody JwtTokenDTO validationTokenDTO) {
+        authService.validateEmail(validationTokenDTO.jwtToken());
 
         return ResponseEntity.ok().build();
     }

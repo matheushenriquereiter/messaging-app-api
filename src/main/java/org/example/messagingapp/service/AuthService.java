@@ -37,7 +37,7 @@ public class AuthService {
         emailService.sendVerificationEmail(userToRegister);
     }
 
-    public void verifyEmail(String jwtToken) {
+    public void validateEmail(String jwtToken) {
         if (!jwtService.isTokenValid(jwtToken)) {
             throw new BusinessException(HttpStatus.BAD_REQUEST, "Invalid or expired token");
         }
